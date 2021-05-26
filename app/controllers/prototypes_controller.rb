@@ -40,16 +40,13 @@ class PrototypesController < ApplicationController
 
   def edit
     @prototype = Prototype.find(params[:id])
+    unless current_user.id == @prototype.user.id
+      redirect_to action: :edit
+    end
   end
 
   private
     def prototype_params
       params.require(:prototype).permit(:title, :catch_copy, :concept, :image).merge(user_id: current_user.id)
     end
-
-    def index_move
-      unless user_signed_in?
-        redirect_to action: :edit
-      end
-    end
-end
+end 
